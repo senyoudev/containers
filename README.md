@@ -1,21 +1,16 @@
-# Chapter 3: FileSystem Isolation
- 
- ## Overview
-This chapter introduces **filesystem isolation** using `chroot`.  
+# Chapter 4: Resource limits(cgroups)
 
+ ## Overview
+This chapter applies **CPU & memory constraints** using cgroups.
  ## Usage
 
  ### Using Golang
- ```sh
- go run main.go run /bin/sh
+
+```sh
+ cat  /sys/fs/cgroup/container/memory.max 
+ cat  /sys/fs/cgroup/container/cpu.max
  ```
 
- ### Using Docker
- ```sh
- docker run <image_name> /bin/sh
- ```
-
- ### Using OContainer
- ```sh
- OContainer run /bin/sh
- ```
+ ## Expected Output
+ 104857600
+ 50000 100000

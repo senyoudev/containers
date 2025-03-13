@@ -5,6 +5,9 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
+	"path/filepath"
+   	"strconv"
+ 	"io/ioutil"
 )
  
  func main() {
@@ -43,6 +46,9 @@ import (
  func child() {
  	fmt.Printf("Running %v as %d in child\n", os.Args[2:], os.Getpid())
 
+	// cgroups
+	cg()
+
 	// Set hostname
  	if err := syscall.Sethostname([]byte("oracleContainer")); err != nil {
  		fmt.Printf("Failed to set hostname: %v\n", err)
@@ -78,3 +84,50 @@ import (
 		panic(err)
 	}
 }
+
+  func cg() {
+   	cgroupRoot := "/sys/fs/cgroup"
+   	containerCgroup := filepath.Join(cgroupRoot, "container")
+   
+   	// 1. Delete existing cgroup (if any)
+   	os.RemoveAll(containerCgroup)
+   
+   	// 2. Create cgroup directory
+   	if err := os.Mkdir(containerCgroup, 0755); err != nil {
+   		panic(fmt.Sprintf("Failed to create cgroup: %v", err))
+   	}
+   
+   		// Set memory limit (100MB)
+   	must(ioutil.WriteFile(
+   		filepath.Join(containerCgroup, "memory.max"),
+   		[]byte("100M"), // 100 megabytes
+   		0644,
+   	))
+   
+   	// Set CPU limit 
+   	must(ioutil.WriteFile(
+   		filepath.Join(containerCgroup, "cpu.max"),
+   		[]byte("50000 100000"), // 50ms quota, 100ms period
+   		0644,
+   	))
+   
+   	// 5. Add current process to cgroup
+   	pid := os.Getpid()
+   	if err := ioutil.WriteFile(
+   		filepath.Join(containerCgroup, "cgroup.procs"),
+   		[]byte(strconv.Itoa(pid)),
+   		0644,
+   	); err != nil {
+   		panic(fmt.Sprintf("Failed to add process: %v", err))
+   	}
+   }
+
+    // Helper function to check if a string contains a substring
+   func contains(s, substr string) bool {
+   	for i := 0; i < len(s)-len(substr)+1; i++ {
+   		if s[i:i+len(substr)] == substr {
+   			return true
+   		}
+   	}
+   	return false
+   }
