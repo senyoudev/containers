@@ -1,9 +1,10 @@
 package main
- 
- import (
- 	"fmt"
- 	"os"
- )
+
+import (
+	"fmt"
+	"os"
+	"os/exec"
+)
  
  func main() {
  	if len(os.Args) < 2 {
@@ -12,8 +13,21 @@ package main
  
  	switch os.Args[1] {
  	case "run":
- 		fmt.Println("Running a new container...")
- 	default:
+		run()
+	default:
  		panic("Bad command")
+ 	}
+ }
+
+ func run() {
+ 	fmt.Printf("Running %v\n", os.Args[2:])
+ 
+ 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
+ 	cmd.Stdin = os.Stdin
+ 	cmd.Stdout = os.Stdout
+ 	cmd.Stderr = os.Stderr
+ 
+ 	if err := cmd.Run(); err != nil {
+ 		fmt.Printf("Error running command: %v\n", err)
  	}
  }
