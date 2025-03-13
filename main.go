@@ -48,6 +48,17 @@ import (
  		fmt.Printf("Failed to set hostname: %v\n", err)
  		os.Exit(1)
  	}
+
+	// Change root filesystem
+ 	rootfs := "/tmp/oracletalk"
+ 	if err := syscall.Chroot(rootfs); err != nil {
+ 		fmt.Printf("Failed to chroot: %v\n", err)
+ 		os.Exit(1)
+ 	}
+ 	if err := os.Chdir("/"); err != nil {
+ 		fmt.Printf("Failed to change directory: %v\n", err)
+ 		os.Exit(1)
+ 	}
  
  	cmd := exec.Command(os.Args[2], os.Args[3:]...)
  	cmd.Stdin = os.Stdin

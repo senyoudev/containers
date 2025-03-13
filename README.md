@@ -1,21 +1,21 @@
-# Chapter 2: Namespaces
+# Chapter 3: FileSystem Isolation
  
  ## Overview
-This chapter isolates the process PID.
+This chapter introduces **filesystem isolation** using `chroot`.  
 
  ## Usage
 
  ### Using Golang
  ```sh
- go run main.go run echo "Hello from container"
+ go run main.go run /bin/sh
  ```
 
  ### Using Docker
  ```sh
- docker run <image_name> run echo "Hello from container"
+ docker run <image_name> /bin/sh
  ```
 
  ### Using OContainer
  ```sh
- OContainer run echo "Hello from container"
+ OContainer run /bin/sh
  ```
