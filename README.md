@@ -1,21 +1,21 @@
-# Chapter 1: Basic Process Execution
+# Chapter 2: Namespaces
  
  ## Overview
- This chapter introduces a simple program that can execute commands.
- 
+This chapter introduces **Linux namespaces**, starting with UTS (hostname) isolation.
+
  ## Usage
 
  ### Using Golang
  ```sh
- go run main.go run echo "Hello, Container!"
+ go run main.go run hostname
  ```
 
  ### Using Docker
  ```sh
- docker run <image_name> echo "Hello, Container!"
+ docker run <image_name> run hostname
  ```
 
  ### Using OContainer
  ```sh
- OContainer run echo "Hello, Container!"
+ OContainer run hostname
  ```
