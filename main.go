@@ -59,6 +59,9 @@ import (
  		fmt.Printf("Failed to change directory: %v\n", err)
  		os.Exit(1)
  	}
+
+	must(syscall.Mount("proc", "proc", "proc", 0, ""))
+
  
  	cmd := exec.Command(os.Args[2], os.Args[3:]...)
  	cmd.Stdin = os.Stdin
@@ -69,3 +72,9 @@ import (
  		fmt.Printf("Error running command in child: %v\n", err)
  	}
  }
+
+ func must(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
