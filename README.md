@@ -1,21 +1,21 @@
 # Chapter 2: Namespaces
  
  ## Overview
-This chapter introduces **Linux namespaces**, starting with UTS (hostname) isolation.
+This chapter isolates the process PID.
 
  ## Usage
 
  ### Using Golang
  ```sh
- go run main.go run hostname
+ go run main.go run echo "Hello from container"
  ```
 
  ### Using Docker
  ```sh
- docker run <image_name> run hostname
+ docker run <image_name> run echo "Hello from container"
  ```
 
  ### Using OContainer
  ```sh
- OContainer run hostname
+ OContainer run echo "Hello from container"
  ```
